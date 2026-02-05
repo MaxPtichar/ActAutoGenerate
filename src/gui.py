@@ -1,8 +1,9 @@
-from pydoc import pager
+from datetime import datetime
 
 import flet as ft
 
 import doc_engine
+from models import Organization, Requisites
 
 
 class OrgFormDialogAlert(ft.AlertDialog):
@@ -31,6 +32,12 @@ class OrgFormDialogAlert(ft.AlertDialog):
             value="1",
             tooltip="Отсчет актов начнется с введенного номера",
             keyboard_type=ft.KeyboardType.NUMBER,
+        )
+
+        self.date_field = ft.TextField(
+            label="Дата",
+            hint_text="01.01.2026",
+            tooltip="Созданный акт будет последним числом введенного месяца",
         )
 
         # Реквизиты (Requisites)
@@ -68,6 +75,7 @@ class OrgFormDialogAlert(ft.AlertDialog):
                             self.agreement,
                             self.fee,
                             self.act_counter,
+                            self.date_field,
                         ]
                     ),
                     ft.VerticalDivider(),
@@ -89,9 +97,33 @@ class OrgFormDialogAlert(ft.AlertDialog):
 
         self.actions = [ft.TextButton("Назад", on_click=self.close_dialog)]
 
+    def get_all_data(self) -> Organization:
+        reqs = Requisites(
+            unp=self.unp.value,
+            address=self.address.value,
+            bank_account=self.bank_account.value,
+            name_of_bank=self.name_of_bank.value,
+            bic=self.bic.value,
+            mobile_num=self.mobile_num.value,
+            e_mail=self.e_mail.value,
+        )
+        return Organization(
+            id=None,
+            name=self.name.value,
+            manager_name=self.manager_name.value,
+            agreement=self.agreement.value,
+            fee=float(self.fee.value),
+            act_counter=int(self.act_counter.value),
+            date=datetime.strptime(self.date_field.value, "%d.%m.%Y").date(),
+            requisites=reqs,
+        )
+
     def close_dialog(self, e):
         self.open = False
         self.page.update()
+
+    def save_data(self, e):
+        pass
 
 
 class MainMenuButton(ft.Column):
