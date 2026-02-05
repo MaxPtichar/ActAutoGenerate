@@ -7,5 +7,6 @@
 venv/
 template/
 template*.docx
+output/
 test.py
 test2.py
