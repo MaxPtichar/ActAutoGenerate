@@ -100,7 +100,9 @@ class MainMenuButton(ft.Column):
         self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
         self.gen_button = ft.Button(
-            ft.Text("Сгенерировать акты"), on_click=self.start_generation
+            content=ft.Text("Сгенерировать акты"),
+            icon=ft.Icon(ft.Icons.DESCRIPTION),
+            on_click=self.start_generation,
         )
 
         self.controls = [self.gen_button]
@@ -129,7 +131,9 @@ def main(page: ft.Page):
 
     page.add(
         ft.Button(
-            "Добавить организацию", on_click=lambda e: page.show_dialog(org_dialog)
+            content=ft.Text("Добавить организацию"),
+            icon=ft.Icon(ft.Icons.CORPORATE_FARE),
+            on_click=lambda e: page.show_dialog(org_dialog),
         )
     )
 
