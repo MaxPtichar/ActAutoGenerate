@@ -7,8 +7,10 @@ from models import Organization, Requisites
 
 
 class OrgFormDialogAlert(ft.AlertDialog):
-    def __init__(self):
+    def __init__(self, on_save):
         super().__init__()
+
+        self.callback_on_save = on_save
 
         # организация
         self.name = ft.TextField(
@@ -95,7 +97,10 @@ class OrgFormDialogAlert(ft.AlertDialog):
             )
         )
 
-        self.actions = [ft.TextButton("Назад", on_click=self.close_dialog)]
+        self.actions = [
+            ft.TextButton("Сохранить", on_click=self.save_data),
+            ft.TextButton("Назад", on_click=self.close_dialog),
+        ]
 
     def get_all_data(self) -> Organization:
         reqs = Requisites(
@@ -123,7 +128,13 @@ class OrgFormDialogAlert(ft.AlertDialog):
         self.page.update()
 
     def save_data(self, e):
-        pass
+        try:
+            obj = self.get_all_data()
+            self.callback_on_save(obj)
+            self.close_dialog(e)
+
+        except Exception as ex:
+            self.page.show_dialog(ft.SnackBar(ft.Text(f"Ошибка {ex}")))
 
 
 class MainMenuButton(ft.Column):
@@ -155,7 +166,13 @@ class MainMenuButton(ft.Column):
 
 
 def main(page: ft.Page):
-    org_dialog = OrgFormDialogAlert()
+
+    def handle_save(new_org: Organization):
+        page.show_dialog(
+            ft.SnackBar(ft.Text(f"Организация {new_org.name} успешно добавлена"))
+        )
+
+    org_dialog = OrgFormDialogAlert(on_save=handle_save)
     gen_act = MainMenuButton()
     page.title = "Генератор актов"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
