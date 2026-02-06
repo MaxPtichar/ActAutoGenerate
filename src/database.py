@@ -6,9 +6,10 @@ from models import Organization, Requisites
 
 
 class DBManager:
-    def __init__(self, db_path) -> None:
-        db_file = Path(db_path)
-        self.connect = sqlite3.connect(str(db_file.absolute()))
+    def __init__(self) -> None:
+        self.base_dir = Path(__file__).parent.parent
+        self.db_path = self.base_dir / "database" / "organization.db"
+        self.connect = sqlite3.connect(str(self.db_path.absolute()))
         self.cursor = self.connect.cursor()
         self.create_table()
 
@@ -105,28 +106,3 @@ class DBManager:
             organizations.append(org)
 
         return organizations
-
-
-if __name__ == "__main__":
-    db = DBManager("database/organization.db")
-    req = Requisites(
-        unp="",
-        address="",
-        bank_account="",
-        name_of_bank="",
-        bic="",
-        mobile_num="",
-        e_mail="",
-    )
-
-    new_org = Organization(
-        id=None,
-        name="",
-        manager_name="",
-        agreement="",
-        fee=1,
-        act_counter=1,
-        date=date(1000, 1, 1),
-        requisites=req,
-    )
-    db.insert_organization(new_org)

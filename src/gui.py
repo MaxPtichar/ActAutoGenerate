@@ -3,6 +3,7 @@ from datetime import datetime
 import flet as ft
 
 import doc_engine
+from database import DBManager
 from models import Organization, Requisites
 
 
@@ -166,13 +167,16 @@ class MainMenuButton(ft.Column):
 
 
 def main(page: ft.Page):
+    db = DBManager()
 
     def handle_save(new_org: Organization):
+        db.insert_organization(new_org)
         page.show_dialog(
             ft.SnackBar(ft.Text(f"Организация {new_org.name} успешно добавлена"))
         )
 
     org_dialog = OrgFormDialogAlert(on_save=handle_save)
+
     gen_act = MainMenuButton()
     page.title = "Генератор актов"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER

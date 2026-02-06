@@ -5,7 +5,7 @@ from docxtpl import DocxTemplate
 from constants import MONTHS_RU
 from database import DBManager
 
-db = DBManager("database/organization.db")
+db = DBManager()
 
 
 def path_save(filename: str) -> Path:
