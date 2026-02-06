@@ -6,6 +6,8 @@ import doc_engine
 from database import DBManager
 from models import Organization, Requisites
 
+db = DBManager()
+
 
 class OrgFormDialogAlert(ft.AlertDialog):
     def __init__(self, on_save):
@@ -166,8 +168,33 @@ class MainMenuButton(ft.Column):
         self.page.update()
 
 
+class ShowOrg(ft.Column):
+    def __init__(self):
+        super().__init__()
+
+        self.lv = ft.ListView(expand=1, spacing=10, padding=20, visible=False)
+        self.refgresh_data()
+
+        self.show_org_button = ft.Button(
+            content="Посмотреть организации",
+            icon=ft.Icon(ft.Icons.WORK),
+            on_click=self.page_add,
+        )
+        self.controls = [self.show_org_button, self.lv]
+
+    def page_add(self, e):
+        self.lv.visible = not self.lv.visible
+        self.page.update()
+        self.show_org_button = ft.ListView
+
+    def refgresh_data(self):
+        data = db.fetch_organization()
+        self.lv.controls.clear()
+        for row in data:
+            self.lv.controls.append(ft.Text(f"{row.name}"))
+
+
 def main(page: ft.Page):
-    db = DBManager()
 
     def handle_save(new_org: Organization):
         db.insert_organization(new_org)
@@ -189,6 +216,9 @@ def main(page: ft.Page):
             on_click=lambda e: page.show_dialog(org_dialog),
         )
     )
+
+    show_org = ShowOrg()
+    page.add(show_org)
 
 
 if __name__ == "__main__":
