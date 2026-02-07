@@ -6,7 +6,7 @@ import holidays
 import pymorphy3
 from num2words import num2words
 
-from constants import MONTHS_RU
+from .constants import MONTHS_RU
 
 mf = pymorphy3.MorphAnalyzer()
 

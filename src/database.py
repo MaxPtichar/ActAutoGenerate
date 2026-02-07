@@ -2,9 +2,7 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
-from fastapi import params
-
-from models import Organization, Requisites
+from .models import Organization, Requisites
 
 
 class DBManager:
