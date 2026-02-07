@@ -2,8 +2,8 @@ from datetime import datetime
 
 import flet as ft
 
-from .. import doc_engine
-from ..database import DBManager
+from ..core import doc_engine
+from ..database.db_manager import DBManager
 from ..models import Organization, Requisites
 
 db = DBManager()
