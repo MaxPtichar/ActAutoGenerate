@@ -11,3 +11,6 @@ class OrgServices:
 
     def list_all(self) -> List[Organization]:
         return self.db.fetch_organization()
+
+    def _org_list(self):
+

@@ -3,6 +3,7 @@ from typing import Callable
 import flet as ft
 
 from src.services.organization_services import OrgServices
+from src.UI.elements.organization_table import OrganizationTable
 
 
 class ShowOrg(ft.Column):
@@ -11,7 +12,10 @@ class ShowOrg(ft.Column):
         self.org = org_service
         self.on_back = on_back
 
-        self.controls = [self._header(), self._org_list()]
+        self.table = OrganizationTable(
+            org_service, self._on_edit_org, self._on_delete_org
+        )
+        self.controls = [self._header(), self.table]
 
     def _header(self):
         return ft.Row(
@@ -23,27 +27,8 @@ class ShowOrg(ft.Column):
             ]
         )
 
-    def _org_list(self):
-        lv = ft.DataTable(
-            columns=[
-                ft.DataColumn(label=ft.Text("Название")),
-                ft.DataColumn(label=ft.Text("УНП")),
-                ft.DataColumn(label=ft.Text("Доход")),
-                ft.DataColumn(label=ft.Text("Настройки")),
-            ],
-            rows=[],
-        )
+    def _on_edit_org(self, org: Organization):
+        print("Edit:", org.name)
 
-        for org in self.org.list_all():
-            lv.rows.append(
-                ft.DataRow(
-                    cells=[
-                        ft.DataCell(ft.Text(org.name)),
-                        ft.DataCell(ft.Text(org.requisites.unp)),
-                        ft.DataCell(ft.Text(f"{int(org.fee)}")),
-                        ft.DataCell(ft.IconButton(ft.CupertinoIcons.ELLIPSIS_VERTICAL)),
-                    ]
-                )
-            )
-
-        return lv
+    def _on_delete_org(self, org: Organization):
+        print("Delete:", org.name)
