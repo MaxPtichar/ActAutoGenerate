@@ -9,14 +9,14 @@ db = DBManager()
 
 
 def path_save(filename: str) -> Path:
-    base_dir = Path(__file__).parent.parent
+    base_dir = Path(__file__).parent.parent.parent
     out_path = base_dir / "output"
     out_path.mkdir(exist_ok=True)
     return out_path / filename
 
 
 def create_files() -> None:
-    base_dir = Path(__file__).parent.parent
+    base_dir = Path(__file__).parent.parent.parent
     template_path = base_dir / "template" / "template1.docx"
     if not template_path.exists():
         print(f"ERRROR: Шаблон не найден по пути {template_path}")
