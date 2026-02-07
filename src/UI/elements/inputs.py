@@ -24,13 +24,13 @@ class AppTextField(ft.TextField):
         # design
         self.border_width = 1.6
         self.border_radius = 6
-        self.border_color = ft.Colors.BLUE_GREY_200
+        self.border_color = ft.Colors.GREY_700
         self.focused_border_color = ft.Colors.BLUE_700
         self.focused_border_width = 2
 
         # text color
         self.label_style = ft.TextStyle(
-            color=ft.Colors.BLUE_GREY_200, weight=ft.FontWeight.W_500
+            color=ft.Colors.GREY_700, weight=ft.FontWeight.W_500
         )
         self.selection_color = ft.Colors.BLUE_100
 
