@@ -12,5 +12,8 @@ class OrgServices:
     def list_all(self) -> List[Organization]:
         return self.db.fetch_organization()
 
-    def _org_list(self):
+    def deleted_org(self, org: Organization) -> None:
+        return self.db.delete_organization(org)
 
+    def edit_org(self, org: Organization):
+        return self.db.edit_organization(org)
