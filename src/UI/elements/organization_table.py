@@ -4,6 +4,7 @@ import flet as ft
 
 from src.models import Organization
 from src.services.organization_services import OrgServices
+from src.UI.elements.Popup_Menu_Button import ActionMenu
 
 
 class OrganizationTable(ft.Container):
@@ -40,7 +41,13 @@ class OrganizationTable(ft.Container):
                         ft.DataCell(ft.Text(org.name)),
                         ft.DataCell(ft.Text(org.requisites.unp)),
                         ft.DataCell(ft.Text(f"{int(org.fee)}")),
-                        ft.DataCell(ft.IconButton(ft.CupertinoIcons.ELLIPSIS_VERTICAL)),
+                        ft.DataCell(
+                            ActionMenu(
+                                org=org,
+                                on_update=self.on_edit,
+                                on_delete=self.on_delete,
+                            )
+                        ),
                     ]
                 )
             )
