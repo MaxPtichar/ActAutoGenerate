@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import flet as ft
 
 from src.models import Organization
@@ -9,19 +7,19 @@ from src.UI.components.OrgForm import OrgFormDialogAlert
 from src.UI.elements.buttons import MainMenuButton, ShowOrg
 
 
-def main(page: ft.Page) -> None:
-    DocService = DocumentService()
-    OrganizationService = OrgServices()
+def build_app(page: ft.Page) -> None:
+    doc_service = DocumentService()
+    organization_service = OrgServices()
 
     def handle_save(new_org: Organization):
-        OrganizationService.add_org(new_org)
+        organization_service.add_org(new_org)
         page.show_dialog(
             ft.SnackBar(ft.Text(f"Организация {new_org.name} успешно добавлена"))
         )
 
     org_dialog = OrgFormDialogAlert(on_save=handle_save)
 
-    gen_act = MainMenuButton(DocService)
+    gen_act = MainMenuButton(doc_service)
     page.title = "Генератор актов"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.add(gen_act)
@@ -34,7 +32,7 @@ def main(page: ft.Page) -> None:
         )
     )
 
-    show_org = ShowOrg(OrganizationService)
+    show_org = ShowOrg(organization_service)
     page.add(show_org)
 
 

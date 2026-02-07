@@ -1,6 +1,11 @@
 import flet as ft
 
-from src.UI.gui import main as gui_main
+from src.UI.views.main_view import build_app
+
+
+def main(page: ft.Page):
+    build_app(page)
+
 
 if __name__ == "__main__":
-    ft.app(target=gui_main)
+    ft.app(target=main)
