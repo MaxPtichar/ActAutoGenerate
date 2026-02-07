@@ -2,13 +2,12 @@ from datetime import datetime
 
 import flet as ft
 
+from src.services.document_services import DocumentService
+from src.services.organization_services import OrgServices
 from src.UI.components.OrgForm import OrgFormDialogAlert
 
-from ..core import doc_engine
-from ..database.db_manager import DBManager
-from ..models import Organization, Requisites
-
-db = DBManager()
+ds = DocumentService()
+orgserv = OrgServices()
 
 
 class MainMenuButton(ft.Column):
@@ -29,7 +28,7 @@ class MainMenuButton(ft.Column):
         self.gen_button.update()
 
         try:
-            doc_engine.create_files()
+            ds.generate_acts()
 
             self.page.show_dialog(ft.SnackBar(ft.Text("Акты созданы.")))
         except Exception as ex:
@@ -59,7 +58,7 @@ class ShowOrg(ft.Column):
         self.show_org_button = ft.ListView
 
     def refgresh_data(self):
-        data = db.fetch_organization()
+        data = orgserv.list_all()
         self.lv.controls.clear()
         for row in data:
             self.lv.controls.append(ft.Text(f"{row.name}"))
@@ -68,7 +67,7 @@ class ShowOrg(ft.Column):
 def main(page: ft.Page):
 
     def handle_save(new_org: Organization):
-        db.insert_organization(new_org)
+        orgserv.add_org(new_org)
         page.show_dialog(
             ft.SnackBar(ft.Text(f"Организация {new_org.name} успешно добавлена"))
         )

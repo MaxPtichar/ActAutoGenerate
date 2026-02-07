@@ -6,7 +6,7 @@ class OrgServices:
     def __init__(self) -> None:
         self.db = DBManager()
 
-    def add(self, org: Organization) -> None:
+    def add_org(self, org: Organization) -> None:
         self.db.insert_organization(org)
 
     def list_all(self) -> List[Organization]:
