@@ -24,17 +24,41 @@ class ShowOrg(ft.Column):
         )
 
     def _org_list(self):
-        lv = ft.ListView(expand=True, spacing=10)
+        lv = ft.DataTable(
+            columns=[
+                ft.DataColumn(label=ft.Text("Название")),
+                ft.DataColumn(label=ft.Text("УНП")),
+                ft.DataColumn(label=ft.Text("Доход")),
+            ],
+            rows=[],
+        )
 
         for org in self.org.list_all():
-            lv.controls.append(
-                ft.Row(
-                    controls=[
-                        ft.Text(f"Название: {org.name}", expand=True),
-                        ft.Text(f" УНП: {org.requisites.unp}", expand=True),
-                        ft.Text(f"Доход: {int(org.fee)}", expand=True),
+            lv.rows.append(
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(ft.Text(org.name)),
+                        ft.DataCell(ft.Text(org.requisites.unp)),
+                        ft.DataCell(ft.Text(f"{int(org.fee)}")),
                     ]
                 )
             )
 
         return lv
+
+
+# def _org_list(self):
+#         lv = ft.ListView(expand=True, spacing=10)
+
+#         for org in self.org.list_all():
+#             lv.controls.append(
+#                 ft.Row(
+#                     controls=[
+#                         ft.Text(f"Название: {org.name}", expand=True),
+#                         ft.Text(f" УНП: {org.requisites.unp}", expand=True),
+#                         ft.Text(f"Доход: {int(org.fee)}", expand=True),
+#                     ]
+#                 )
+#             )
+
+#         return lv
