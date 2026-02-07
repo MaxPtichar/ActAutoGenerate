@@ -173,7 +173,6 @@ class ShowOrg(ft.Column):
         super().__init__()
 
         self.lv = ft.ListView(expand=1, spacing=10, padding=20, visible=False)
-        self.refgresh_data()
 
         self.show_org_button = ft.Button(
             content="Посмотреть организации",
@@ -183,6 +182,7 @@ class ShowOrg(ft.Column):
         self.controls = [self.show_org_button, self.lv]
 
     def page_add(self, e):
+        self.refgresh_data()
         self.lv.visible = not self.lv.visible
         self.page.update()
         self.show_org_button = ft.ListView

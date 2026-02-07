@@ -2,6 +2,8 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
+from fastapi import params
+
 from models import Organization, Requisites
 
 
@@ -106,3 +108,12 @@ class DBManager:
             organizations.append(org)
 
         return organizations
+
+    def delete_organization(self, org_unp):
+        try:
+            query = "DELETE FROM organizations WHERE unp = ?"
+            val = (org_unp,)
+            self.execute_query(query, params=val)
+            print(f"Successfully deleted")
+        except sqlite3.OperationalError as e:
+            raise Exception(f"Ошибка {e}. Такого унп {org_unp} нет.") from e
