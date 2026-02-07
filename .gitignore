@@ -10,3 +10,6 @@ template*.docx
 output/
 test.py
 test2.py
+tests/
+**/__pycache__/
+*.py[cod]

@@ -2,24 +2,24 @@ from pathlib import Path
 
 from docxtpl import DocxTemplate
 
-from constants import MONTHS_RU
-from database import DBManager
+from ..constants import MONTHS_RU
+from ..database.db_manager import DBManager
 
-db = DBManager("database/organization.db")
+db = DBManager()
 
 
-def path_save(filename):
-    base_dir = Path(__file__).parent.parent
+def path_save(filename: str) -> Path:
+    base_dir = Path(__file__).parent.parent.parent
     out_path = base_dir / "output"
     out_path.mkdir(exist_ok=True)
     return out_path / filename
 
 
-def create_files():
-    base_dir = Path(__file__).parent.parent
+def create_files() -> None:
+    base_dir = Path(__file__).parent.parent.parent
     template_path = base_dir / "template" / "template1.docx"
     if not template_path.exists():
-        print(f"ОШИБКА: Шаблон не найден по пути {template_path}")
+        print(f"ERRROR: Шаблон не найден по пути {template_path}")
         return
     all_fetch = db.fetch_organization()
     if all_fetch:
