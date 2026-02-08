@@ -7,7 +7,6 @@ from src.models import Organization
 from src.services.document_services import DocumentService
 from src.services.organization_services import OrgServices
 from src.UI.components.OrgForm import OrgFormDialogAlert
-from src.UI.elements.File_picker import PickFiles
 from src.UI.views.organizations_view import ShowOrg
 
 
@@ -53,7 +52,6 @@ def build_app(page: ft.Page) -> None:
 
     doc_service = DocumentService()
     organization_service = OrgServices()
-    picker = PickFiles()
 
     page.title = "Генератор актов"
 
