@@ -15,9 +15,9 @@ def path_save(filename: str) -> Path:
     return out_path / filename
 
 
-def create_files() -> None:
-    base_dir = Path(__file__).parent.parent.parent
-    template_path = base_dir / "template" / "template1.docx"
+def create_files(selected_template: str) -> None:
+    template_path = Path(selected_template)
+
     if not template_path.exists():
         print(f"ERRROR: Шаблон не найден по пути {template_path}")
         return
