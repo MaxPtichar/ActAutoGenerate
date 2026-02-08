@@ -25,7 +25,7 @@ class Requisites:
 
 @dataclass
 class Organization:
-    id: int
+    id: int | None
     name: str
     manager_name: str
     agreement: str
