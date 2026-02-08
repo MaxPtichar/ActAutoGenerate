@@ -54,7 +54,8 @@ class OrganizationTable(ft.Container):
         return rows
 
     def refresh_table(self):
-        self.table = self._build_rows()
+        new_data = self._build_rows()
+        self.table.rows = new_data
         self.update()
         if self.page:
 
