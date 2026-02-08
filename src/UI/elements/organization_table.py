@@ -19,10 +19,7 @@ class OrganizationTable(ft.Container):
         self.on_edit = on_edit
         self.on_delete = on_delete
 
-        self.content = self.build_columns()
-
-    def build_columns(self):
-        return ft.DataTable(
+        self.table = ft.DataTable(
             columns=[
                 ft.DataColumn(label=ft.Text("Название")),
                 ft.DataColumn(label=ft.Text("УНП")),
@@ -31,6 +28,8 @@ class OrganizationTable(ft.Container):
             ],
             rows=self._build_rows(),
         )
+
+        self.content = self.table
 
     def _build_rows(self):
         rows = []
@@ -53,3 +52,10 @@ class OrganizationTable(ft.Container):
             )
 
         return rows
+
+    def refresh_table(self):
+        self.table = self._build_rows()
+        self.update()
+        if self.page:
+
+            self.page.update()
