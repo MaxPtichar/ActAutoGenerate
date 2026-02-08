@@ -43,6 +43,7 @@ class MainMenuView(ft.Column):
 
 
 def build_app(page: ft.Page) -> None:
+
     doc_service = DocumentService()
     organization_service = OrgServices()
 
@@ -54,7 +55,7 @@ def build_app(page: ft.Page) -> None:
             ft.SnackBar(ft.Text(f"Организация {new_org.name} успешно добавлена"))
         )
 
-    org_dialog = OrgFormDialogAlert(on_save=handle_save)
+    org_dialog = OrgFormDialogAlert(org=None, on_save=handle_save)
 
     def show_main_menu():
         page.controls.clear()
