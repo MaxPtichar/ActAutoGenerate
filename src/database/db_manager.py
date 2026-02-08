@@ -107,14 +107,14 @@ class DBManager:
 
         return organizations
 
-    def delete_organization(self, org_unp):
+    def delete_organization(self, ord_id):
         try:
-            query = "DELETE FROM organizations WHERE unp = ?"
-            val = (org_unp,)
+            query = "DELETE FROM organizations WHERE id = ?"
+            val = (ord_id,)
             self.execute_query(query, params=val)
             print(f"Successfully deleted")
         except sqlite3.OperationalError as e:
-            raise Exception(f"Ошибка {e}. Такого унп {org_unp} нет.") from e
+            raise Exception(f"Ошибка {e}. Такого унп {ord_id} нет.") from e
 
     def edit_organization(self, org: Organization):
         try:
