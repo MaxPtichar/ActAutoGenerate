@@ -6,4 +6,5 @@
 - [ ] Apply unified design to organization_view
 - [x] Add module and class for Table and write attributes
 - [x] add PopupMenuButton class and write attributes
-- [ ] connect methods delete and edit with main logic
+- [x] connect methods delete and edit with main logic
+- [] - create file data for saving path for template
