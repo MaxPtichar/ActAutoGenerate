@@ -3,6 +3,8 @@ from typing import Callable
 import flet as ft
 
 from src.services.organization_services import OrgServices
+from src.UI.components.OrgForm import OrgFormDialogAlert
+from src.UI.elements.organization_table import OrganizationTable
 
 
 class ShowOrg(ft.Column):
@@ -11,7 +13,10 @@ class ShowOrg(ft.Column):
         self.org = org_service
         self.on_back = on_back
 
-        self.controls = [self._header(), self._org_list()]
+        self.table = OrganizationTable(
+            org_service, self._on_edit_org, self._on_delete_org
+        )
+        self.controls = [self._header(), self.table]
 
     def _header(self):
         return ft.Row(
@@ -23,18 +28,46 @@ class ShowOrg(ft.Column):
             ]
         )
 
-    def _org_list(self):
-        lv = ft.ListView(expand=True, spacing=10)
+    def _on_edit_org(self, org: Organization):
 
-        for org in self.org.list_all():
-            lv.controls.append(
-                ft.Row(
-                    controls=[
-                        ft.Text(f"Название: {org.name}", expand=True),
-                        ft.Text(f" УНП: {org.requisites.unp}", expand=True),
-                        ft.Text(f"Доход: {int(org.fee)}", expand=True),
-                    ]
-                )
+        def handle_save(update_org):
+            self.org.edit_org(update_org)
+            self.table.refresh_table()
+            snack_bar = ft.SnackBar(ft.Text("Данные обновлены"))
+            self.page.show_dialog(snack_bar)
+
+            self.page.update()
+
+        dialog = OrgFormDialogAlert(org=org, on_save=handle_save)
+        self.table.refresh_table()
+        self.page.show_dialog(dialog)
+        self.page.update()
+
+    def _on_delete_org(self, org: Organization):
+
+        def confirm_delete():
+            self.org.deleted_org(org.id)
+            self.table.refresh_table()
+            self.page.pop_dialog()
+            dialog_alert_ok = ft.AlertDialog(
+                content=ft.Text(f"Организация {org.name} удалена"),
+                actions=[
+                    ft.TextButton("ОК", on_click=lambda e: self.page.pop_dialog()),
+                ],
             )
+            self.page.show_dialog(dialog_alert_ok)
 
-        return lv
+        dialog_alert = ft.AlertDialog(
+            title=ft.Text("Подтверждение"),
+            content=ft.Text(f"Вы уверены, что хотите удалить {org.name}?"),
+            actions=[
+                ft.TextButton(
+                    "Да",
+                    on_click=lambda e: confirm_delete(),
+                ),
+                ft.TextButton("Нет", on_click=lambda e: self.page.pop_dialog()),
+            ],
+        )
+
+        self.page.show_dialog(dialog_alert)
+        self.page.update()

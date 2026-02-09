@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Callable
 
 import flet as ft
 
@@ -7,32 +8,41 @@ from src.UI.elements.inputs import AppTextField
 
 
 class OrgFormDialogAlert(ft.AlertDialog):
-    def __init__(self, on_save):
+    def __init__(
+        self, on_save: Callable[[Organization], None], org: Organization | None = None
+    ):
         super().__init__()
 
         self.callback_on_save = on_save
 
+        self.current_org_id = org.id if org else None
+
         # организация
         self.name = AppTextField(
             label="Название организации",
+            value=org.name if org else "",
             hint="ПримерТехно",
             tooltip="Сокращенное название организации",
         )
 
         self.manager_name = AppTextField(
-            label="Имя руководителя", hint="Иванов Иван Иванович"
+            label="Имя руководителя",
+            value=org.manager_name if org else "",
+            hint="Иванов Иван Иванович",
         )
 
         self.agreement = AppTextField(label="Договор", hint="№ 123-А от 01.01.2026")
 
         self.fee = AppTextField(
             label="Стоимость услуг",
+            value=org.fee if org else 0,
             hint="500.00",
             is_numer=True,
         )
 
         self.act_counter = AppTextField(
             label="Номер акта",
+            value=org.act_counter if org else 0,
             hint="1",
             tooltip="Отсчет актов начнется с введенного номера",
             is_numer=True,
@@ -40,6 +50,11 @@ class OrgFormDialogAlert(ft.AlertDialog):
 
         self.date_field = AppTextField(
             label="Дата",
+            value=(
+                org.date.strftime("%d.%m.%Y")
+                if org
+                else datetime.today().strftime("%d.%m.%Y")
+            ),
             hint="01.01.2026",
             tooltip="Созданный акт будет последним числом введенного месяца",
         )
@@ -47,22 +62,46 @@ class OrgFormDialogAlert(ft.AlertDialog):
         # Реквизиты (Requisites)
         self.unp = AppTextField(
             label="УНП",
+            value=org.requisites.unp if org else "",
             hint="9 цифр",
             keyboard_type=ft.KeyboardType.NUMBER,
             max_length=9,
         )
         self.address = AppTextField(
-            label="Адрес", hint="г. Минск, ул. Центральная, д. 1"
+            label="Адрес",
+            value=org.requisites.address if org else "",
+            hint="г. Минск, ул. Центральная, д. 1",
         )
         self.bank_account = AppTextField(
-            label="Расчетный счет (IBAN)", hint="BY20XXXX...", max_length=28
+            label="Расчетный счет (IBAN)",
+            value=org.requisites.bank_account if org else "",
+            hint="BY20XXXX...",
+            max_length=28,
         )
-        self.name_of_bank = AppTextField(label="Название банка", hint="ОАО 'Приорбанк'")
-        self.bic = AppTextField(label="БИК банка", hint="8 символов", max_length=8)
+        self.name_of_bank = AppTextField(
+            label="Название банка",
+            value=org.requisites.name_of_bank if org else "",
+            hint="ОАО 'Приорбанк'",
+        )
+
+        self.bic = AppTextField(
+            label="БИК банка",
+            value=org.requisites.bic if org else "",
+            hint="8 символов",
+            max_length=8,
+        )
+
         self.mobile_num = AppTextField(
-            label="Моб. номер", hint="+375...", is_numer=True
+            label="Моб. номер",
+            value=org.requisites.mobile_num if org else "",
+            hint="+375...",
+            is_numer=True,
         )
-        self.e_mail = AppTextField(label="E-mail", hint="example@mail.com")
+        self.e_mail = AppTextField(
+            label="E-mail",
+            value=org.requisites.e_mail if org else "",
+            hint="example@mail.com",
+        )
 
         # контент окна
 
@@ -131,7 +170,7 @@ class OrgFormDialogAlert(ft.AlertDialog):
             e_mail=self.e_mail.value,
         )
         return Organization(
-            id=None,
+            id=self.current_org_id,
             name=self.name.value,
             manager_name=self.manager_name.value,
             agreement=self.agreement.value,

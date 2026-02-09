@@ -107,11 +107,51 @@ class DBManager:
 
         return organizations
 
-    def delete_organization(self, org_unp):
+    def delete_organization(self, ord_id):
         try:
-            query = "DELETE FROM organizations WHERE unp = ?"
-            val = (org_unp,)
+            query = "DELETE FROM organizations WHERE id = ?"
+            val = (ord_id,)
             self.execute_query(query, params=val)
             print(f"Successfully deleted")
         except sqlite3.OperationalError as e:
-            raise Exception(f"Ошибка {e}. Такого унп {org_unp} нет.") from e
+            raise Exception(f"Ошибка {e}. Такого унп {ord_id} нет.") from e
+
+    def edit_organization(self, org: Organization):
+        try:
+            query = """
+            UPDATE organizations SET
+            name = ?,
+            manager_name =?,
+            agreement  =?,
+            fee  =?,
+            act_counter  =?,
+            date  =?,
+            last_issued_num  =?,
+            unp  =?, address  =?,
+            bank_account  =?,
+            name_of_bank  =?,
+            bic  =?,
+            mobile_num  =?,
+            e_mail =?
+            WHERE id = ?"""
+            values = (
+                org.name,
+                org.manager_name,
+                org.agreement,
+                org.fee,
+                org.act_counter,
+                org.date.isoformat(),
+                org.last_issued_num,
+                org.requisites.unp,
+                org.requisites.address,
+                org.requisites.bank_account,
+                org.requisites.name_of_bank,
+                org.requisites.bic,
+                org.requisites.mobile_num,
+                org.requisites.e_mail,
+                org.id,
+            )
+            self.execute_query(query, params=values)
+
+        except sqlite3.OperationalError as e:
+            raise Exception(f"Ошибка {e}. Такого унп {org.id} нет.") from e
