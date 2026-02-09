@@ -5,6 +5,7 @@ import flet as ft
 
 from src.models import Organization
 from src.services.document_services import DocumentService
+from src.services.Flet_client_storage import PathStorage
 from src.services.organization_services import OrgServices
 from src.UI.components.OrgForm import OrgFormDialogAlert
 from src.UI.views.organizations_view import ShowOrg
@@ -45,13 +46,19 @@ class MainMenuView(ft.Column):
         ]
 
     def _generate_docs(self, e):
+        print(
+            f"Меню: пытаюсь генерировать. Путь в сервисе сейчас: {self.doc_service.template_path}"
+        )
         self.doc_service.generate_acts()
 
 
-def build_app(page: ft.Page) -> None:
+async def build_app(page: ft.Page) -> None:
 
     doc_service = DocumentService()
     organization_service = OrgServices()
+    fcs = PathStorage(page, doc_service)
+
+    await fcs.get_path()
 
     page.title = "Генератор актов"
 
@@ -78,7 +85,8 @@ def build_app(page: ft.Page) -> None:
         if not files:
             return
         template_path = files[0].path
-        doc_service.get_path_for_generate(template_path)
+        await fcs.save_path(template_path)
+        # doc_service.get_path_for_generate(template_path)
 
     main_menu = MainMenuView(
         doc_service=doc_service,
