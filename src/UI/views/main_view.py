@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 from typing import Awaitable, Callable
 
 import flet as ft
@@ -20,6 +21,7 @@ class MainMenuView(ft.Column):
         on_open_directory: Callable[[ft.ControlEvent], Awaitable[None]],
     ):
         super().__init__()
+        self.on_open_directory = on_open_directory
         self.doc_service = doc_service
 
         self.controls = [
@@ -41,15 +43,31 @@ class MainMenuView(ft.Column):
             ft.TextButton(
                 "Выбрать шаблон",
                 icon=ft.Icons.DIRECTIONS,
-                on_click=lambda e: asyncio.create_task(on_open_directory(e)),
+                on_click=lambda e: asyncio.create_task(self.on_open_directory(e)),
             ),
         ]
 
     def _generate_docs(self, e):
-        print(
-            f"Меню: пытаюсь генерировать. Путь в сервисе сейчас: {self.doc_service.template_path}"
-        )
+        temp_path = Path(self.doc_service.template_path)
+        if not temp_path.exists():
+            dialog_alert_ok = ft.AlertDialog(
+                content=ft.Text(f"Для продолжения выберите шаблон"),
+                actions=[
+                    ft.TextButton(
+                        "Выбрать шаблон...",
+                        icon=ft.Icons.FILE_OPEN,
+                        on_click=lambda e: asyncio.create_task(
+                            self.on_open_directory(e)
+                        ),
+                    ),
+                    ft.TextButton("Отмена", on_click=lambda e: self.page.pop_dialog()),
+                ],
+            )
+            self.page.show_dialog(dialog_alert_ok)
+            return
+
         self.doc_service.generate_acts()
+        self.page.show_dialog(ft.SnackBar(ft.Text(f"Акты созданы")))
 
 
 async def build_app(page: ft.Page) -> None:
