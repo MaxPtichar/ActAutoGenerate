@@ -5,6 +5,7 @@ import flet as ft
 
 from src.models import Organization, Requisites
 from src.UI.elements.inputs import AppTextField
+from src.validators.org_validators import OrgValidator, ValidationError
 
 
 class OrgFormDialogAlert(ft.AlertDialog):
@@ -17,12 +18,21 @@ class OrgFormDialogAlert(ft.AlertDialog):
 
         self.current_org_id = org.id if org else None
 
+        self.save_btn = ft.TextButton(
+            "Сохранить",
+            on_click=self.save_data,
+            disabled=True,
+        )
+
         # организация
         self.name = AppTextField(
             label="Название организации",
             value=org.name if org else "",
             hint="ПримерТехно",
             tooltip="Сокращенное название организации",
+        )
+        self.name.on_change = lambda e: self.on_change_handler(
+            self.name, OrgValidator.validate_name_org
         )
 
         self.manager_name = AppTextField(
@@ -152,12 +162,37 @@ class OrgFormDialogAlert(ft.AlertDialog):
         )
 
         self.actions = [
-            ft.TextButton(
-                "Сохранить",
-                on_click=self.save_data,
-            ),
+            self.save_btn,
             ft.TextButton("Назад", on_click=self.close_dialog),
         ]
+
+    def on_change_handler(self, field, validator):
+        try:
+            validator(field.value)
+            field.error = None
+        except ValidationError as err:
+            field.error = str(err)
+
+        self.update_save_state()
+        self.page.update()
+
+    def update_save_state(self):
+        self.form_fields = [
+            self.name,
+            self.manager_name,
+            self.agreement,
+            self.fee,
+            self.act_counter,
+            self.date_field,
+            self.unp,
+            self.address,
+            self.bank_account,
+            self.name_of_bank,
+            self.bic,
+            self.mobile_num,
+            self.e_mail,
+        ]
+        self.save_btn.disabled = any(field.error for field in self.form_fields)
 
     def collect_raw_data(self) -> dict:
         return {
