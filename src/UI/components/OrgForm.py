@@ -4,6 +4,7 @@ from typing import Callable
 import flet as ft
 
 from src.models import Organization, Requisites
+from src.services.organization_services import OrgServices
 from src.UI.elements.inputs import AppTextField
 from src.validators.org_validators import OrgValidator, ValidationError
 
@@ -291,7 +292,9 @@ class OrgFormDialogAlert(ft.AlertDialog):
 
     def save_data(self, e):
         try:
-            obj = self.get_all_data()
+            raw_data = self.collect_raw_data()
+
+            obj = OrgServices.build_org(raw_data)
             self.callback_on_save(obj)
             self.close_dialog(e)
 
