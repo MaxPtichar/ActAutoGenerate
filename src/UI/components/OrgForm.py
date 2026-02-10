@@ -41,7 +41,15 @@ class OrgFormDialogAlert(ft.AlertDialog):
             hint="Иванов Иван Иванович",
         )
 
+        self.manager_name.on_change = lambda e: self.on_change_handler(
+            self.manager_name, OrgValidator.validate_manager_name
+        )
+
         self.agreement = AppTextField(label="Договор", hint="№ 123-А от 01.01.2026")
+
+        self.agreement.on_change = lambda e: self.on_change_handler(
+            self.agreement, OrgValidator.validate_agreement
+        )
 
         self.fee = AppTextField(
             label="Стоимость услуг",
@@ -50,12 +58,20 @@ class OrgFormDialogAlert(ft.AlertDialog):
             is_numer=True,
         )
 
+        self.fee.on_change = lambda e: self.on_change_handler(
+            self.fee, OrgValidator.validate_fee
+        )
+
         self.act_counter = AppTextField(
             label="Номер акта",
             value=org.act_counter if org else 0,
             hint="1",
             tooltip="Отсчет актов начнется с введенного номера",
             is_numer=True,
+        )
+
+        self.act_counter.on_change = lambda e: self.on_change_handler(
+            self.act_counter, OrgValidator.validate_act_counter
         )
 
         self.date_field = AppTextField(
@@ -69,6 +85,10 @@ class OrgFormDialogAlert(ft.AlertDialog):
             tooltip="Созданный акт будет последним числом введенного месяца",
         )
 
+        self.date_field.on_change = lambda e: self.on_change_handler(
+            self.date_field, OrgValidator.validate_date
+        )
+
         # Реквизиты (Requisites)
         self.unp = AppTextField(
             label="УНП",
@@ -77,21 +97,40 @@ class OrgFormDialogAlert(ft.AlertDialog):
             keyboard_type=ft.KeyboardType.NUMBER,
             max_length=9,
         )
+
+        self.unp.on_change = lambda e: self.on_change_handler(
+            self.unp, OrgValidator.validate_unp
+        )
+
         self.address = AppTextField(
             label="Адрес",
             value=org.requisites.address if org else "",
             hint="г. Минск, ул. Центральная, д. 1",
         )
+
+        self.address.on_change = lambda e: self.on_change_handler(
+            self.address, OrgValidator.validate_address
+        )
+
         self.bank_account = AppTextField(
             label="Расчетный счет (IBAN)",
             value=org.requisites.bank_account if org else "",
             hint="BY20XXXX...",
             max_length=28,
         )
+
+        self.bank_account.on_change = lambda e: self.on_change_handler(
+            self.bank_account, OrgValidator.validate_bank_account
+        )
+
         self.name_of_bank = AppTextField(
             label="Название банка",
             value=org.requisites.name_of_bank if org else "",
             hint="ОАО 'Приорбанк'",
+        )
+
+        self.name_of_bank.on_change = lambda e: self.on_change_handler(
+            self.name_of_bank, OrgValidator.validate_name_of_bank
         )
 
         self.bic = AppTextField(
@@ -101,16 +140,29 @@ class OrgFormDialogAlert(ft.AlertDialog):
             max_length=8,
         )
 
+        self.bic.on_change = lambda e: self.on_change_handler(
+            self.bic, OrgValidator.validate_bic
+        )
+
         self.mobile_num = AppTextField(
             label="Моб. номер",
             value=org.requisites.mobile_num if org else "",
             hint="+375...",
             is_numer=True,
         )
+
+        self.mobile_num.on_change = lambda e: self.on_change_handler(
+            self.mobile_num, OrgValidator.validate_mobile_num
+        )
+
         self.e_mail = AppTextField(
             label="E-mail",
             value=org.requisites.e_mail if org else "",
             hint="example@mail.com",
+        )
+
+        self.e_mail.on_change = lambda e: self.on_change_handler(
+            self.e_mail, OrgValidator.validate_e_mail
         )
 
         # контент окна
