@@ -159,6 +159,24 @@ class OrgFormDialogAlert(ft.AlertDialog):
             ft.TextButton("Назад", on_click=self.close_dialog),
         ]
 
+    def collect_raw_data(self) -> dict:
+        return {
+            "id": self.current_org_id,
+            "name": self.name.value,
+            "manager_name": self.manager_name.value,
+            "agreement": self.agreement.value,
+            "fee": self.fee.value,
+            "act_counter": self.act_counter.value,
+            "date": self.date_field.value,
+            "unp": self.unp.value,
+            "address": self.address.value,
+            "bank_account": self.bank_account.value,
+            "name_of_bank": self.name_of_bank.value,
+            "bic": self.bic.value,
+            "mobile_num": self.mobile_num.value,
+            "e_mail": self.e_mail.value,
+        }
+
     def get_all_data(self) -> Organization:
         reqs = Requisites(
             unp=self.unp.value,
