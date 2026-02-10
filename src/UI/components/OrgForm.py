@@ -265,27 +265,6 @@ class OrgFormDialogAlert(ft.AlertDialog):
             "e_mail": self.e_mail.value,
         }
 
-    def get_all_data(self) -> Organization:
-        reqs = Requisites(
-            unp=self.unp.value,
-            address=self.address.value,
-            bank_account=self.bank_account.value,
-            name_of_bank=self.name_of_bank.value,
-            bic=self.bic.value,
-            mobile_num=self.mobile_num.value,
-            e_mail=self.e_mail.value,
-        )
-        return Organization(
-            id=self.current_org_id,
-            name=self.name.value,
-            manager_name=self.manager_name.value,
-            agreement=self.agreement.value,
-            fee=float(self.fee.value),
-            act_counter=int(self.act_counter.value),
-            date=datetime.strptime(self.date_field.value, "%d.%m.%Y").date(),
-            requisites=reqs,
-        )
-
     def close_dialog(self, e):
         self.open = False
         self.page.update()
