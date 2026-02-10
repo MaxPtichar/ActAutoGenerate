@@ -96,7 +96,7 @@ class OrgFormDialogAlert(ft.AlertDialog):
             value=org.requisites.unp if org else "",
             hint="9 цифр",
             keyboard_type=ft.KeyboardType.NUMBER,
-            max_length=9,
+            max_len=9,
         )
 
         self.unp.on_change = lambda e: self.on_change_handler(
@@ -117,7 +117,7 @@ class OrgFormDialogAlert(ft.AlertDialog):
             label="Расчетный счет (IBAN)",
             value=org.requisites.bank_account if org else "",
             hint="BY20XXXX...",
-            max_length=28,
+            max_len=28,
         )
 
         self.bank_account.on_change = lambda e: self.on_change_handler(
@@ -138,7 +138,7 @@ class OrgFormDialogAlert(ft.AlertDialog):
             label="БИК банка",
             value=org.requisites.bic if org else "",
             hint="8 символов",
-            max_length=8,
+            max_len=8,
         )
 
         self.bic.on_change = lambda e: self.on_change_handler(
