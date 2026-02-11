@@ -2,6 +2,8 @@ from pathlib import Path
 
 from docxtpl import DocxTemplate
 
+from src.core.paths import get_output_dir
+
 from ..constants import MONTHS_RU
 from ..database.db_manager import DBManager
 
@@ -9,9 +11,9 @@ db = DBManager()
 
 
 def path_save(filename: str) -> Path:
-    base_dir = Path(__file__).parent.parent.parent
-    out_path = base_dir / "output"
-    out_path.mkdir(exist_ok=True)
+    base_dir = get_output_dir()
+    out_path = base_dir
+    print(out_path / filename)
     return out_path / filename
 
 
