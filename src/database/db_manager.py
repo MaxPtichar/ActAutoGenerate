@@ -1,14 +1,18 @@
 import sqlite3
 from datetime import date
+from os import mkdir
 from pathlib import Path
 
+from src.core.paths import get_data_dir, get_template_dir
 from src.models import Organization, Requisites
 
 
 class DBManager:
     def __init__(self) -> None:
-        self.base_dir = Path(__file__).parent.parent.parent
-        self.db_path = self.base_dir / "data" / "organization.db"
+        get_template_dir()
+        self.data_dir: Path = get_data_dir()
+
+        self.db_path = self.data_dir / "organization.db"
         self.connect = sqlite3.connect(str(self.db_path.absolute()))
         self.cursor = self.connect.cursor()
         self.create_table()
