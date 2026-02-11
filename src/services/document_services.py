@@ -8,8 +8,6 @@ class DocumentService:
 
     def generate_acts(self) -> None:
 
-        doc_engine.create_files(self.template_path)
-
         if not self.template_path:
             raise RuntimeError("Template path is not set")
         doc_engine.create_files(self.template_path)
